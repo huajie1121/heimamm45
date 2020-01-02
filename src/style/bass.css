@@ -1,0 +1,83 @@
+/* 清除默认的内外边距 */
+body,
+input,
+img,
+div,
+ul,
+li,
+a,
+span,
+i,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+strong,
+ins,
+em,
+del {
+  margin: 0;
+  padding: 0;
+  /* 内减模型:盒子的边框与边距不会影响盒子的大小 */
+  box-sizing: border-box;
+}
+html,
+body {
+  height: 100%;
+}
+
+/* 清除a标签的下划线和字体颜色 */
+a {
+  text-decoration: none;
+  color: #000;
+}
+
+/* 清除li标签前的小点点 */
+li {
+  list-style: none;
+}
+
+/* 清除input标签的边框线和外轮廓线 */
+input {
+  border: none;
+  outline: none;
+}
+
+/* 清除img标签在地基浏览器中的自带边框 */
+/* 控制文字与图片的中线对齐 */
+img {
+  border: none;
+  vertical-align: middle;
+}
+
+/* 调整浏览器的默认字体大小为12px */
+/* 设置 容器高度=字体大小 */
+body {
+  font-size: 12px;
+  line-height: 1;
+  background-color: #ededed;
+}
+
+/* 清除i标签的斜体 */
+i {
+  font-style: normal;
+}
+
+/* 双伪元素法清除浮动影响  --P33 */
+/* 在父元素标签上加上 clearfix 类名即可 */
+.clearfix::before,
+.clearfix::after {
+  content: "";
+  display: block;
+}
+
+.clearfix::after {
+  clear: both;
+}
+
+.clearfix {
+  *zoom: 1;
+}
