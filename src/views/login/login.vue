@@ -7,22 +7,32 @@
         <div class="line"></div>
         <div class="sub-title">用户登录</div>
       </div>
-      <el-form status-icon ref="ruleForm" class="demo-ruleForm frombox">
-        <el-form-item prop="pass">
-          <el-input type="password" prefix-icon="el-icon-user" placeholder="请输入手机号"></el-input>
+      <el-form
+        status-icon
+        ref="ruleForm"
+        :model="ruleForm"
+        :rules="rules"
+        class="demo-ruleForm frombox"
+      >
+        <el-form-item prop="phone">
+          <el-input prefix-icon="el-icon-user" v-model="ruleForm.phone" placeholder="请输入手机号"></el-input>
         </el-form-item>
-        <el-form-item prop="checkPass">
-          <el-input type="password" prefix-icon="el-icon-lock" placeholder="请输入密码"></el-input>
+        <el-form-item prop="password">
+          <el-input v-model="ruleForm.password" prefix-icon="el-icon-lock" placeholder="请输入密码"></el-input>
         </el-form-item>
-        <el-form-item prop="checkPass" class="frombox1">
+        <el-form-item prop="code" class="frombox1">
           <el-row>
-            <el-col :span="16"><el-input type="password" prefix-icon="el-icon-key" placeholder="请输入验证码"></el-input></el-col>
-            <el-col :span="8"><img src=""></el-col>
+            <el-col :span="16">
+              <el-input prefix-icon="el-icon-key" v-model="ruleForm.code" placeholder="请输入验证码"></el-input>
+            </el-col>
+            <el-col :span="8" >
+              <img :src="ruleForm.imgUrl" @click="changeCode"/>
+            </el-col>
           </el-row>
         </el-form-item>
 
         <el-form-item class="checked-box">
-          <el-checkbox v-model="checked">
+          <el-checkbox v-model="ruleForm.checked">
             我已经阅读并同意
             <el-link type="primary">用户协议</el-link>和
             <el-link type="primary">隐私条款</el-link>
@@ -39,12 +49,83 @@
   </div>
 </template>
 
+
 <script>
+///^1[3456789]\d{9}$/
+
+var validatePhone = (rule, value, callback) => {
+  if (value === "") {
+    callback(new Error("请输入手机号码"));
+  } else {
+    //把正则存起来
+    const reg = /^1[3456789]\d{9}$/;
+    if (reg.test(value)) {
+      callback();
+    } else {
+      callback(new Error("请输入正确的手机号码"));
+    }
+  }
+};
 export default {
   name: "login",
+  methods: {
+    submitForm(formName) {
+      if (this.ruleForm.checked == false) {
+        // 提示
+        this.$message.warning("亲爱的用户，请先勾选用户协议哦！(づ￣ 3￣)づ");
+        return;
+      }
+
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          //验证成功 发送请求
+          alert("submit!");
+        } else {
+        this.$message.error("格式不对哦，检查一下呗！");
+          return false;
+        }
+      });
+    },
+    resetForm(formName) {
+      this.$refs[formName].resetFields();
+    },
+    changeCode() {
+      // 必须要有分隔符
+      // this.codeUrl=process.env.VUE_APP_BASEURL+'/captcha?type=login&'+Date.now()
+      // this.codeUrl=process.env.VUE_APP_BASEURL+'/captcha?type=login&'+Math.random()
+      this.ruleForm.imgUrl = process.env.VUE_APP_BASEURL + "/captcha?type=login&t=" + Date.now();
+    }
+  },
   data() {
     return {
-      checked: false
+      ruleForm: {
+        imgUrl: process.env.VUE_APP_BASEURL + "/captcha?type=login",
+        checked: false,
+        phone: "",
+        password: "",
+        code: ""
+      },
+      rules: {
+        phone: [{ validator: validatePhone, trigger: "blur" }],
+        password: [
+          { required: true, message: "请输入密码", trigger: "blur" },
+          {
+            min: 3,
+            max: 10,
+            message: "长度在 3 到 10 个字符",
+            trigger: "change"
+          }
+        ],
+        code: [
+          { required: true, message: "请输入验证码", trigger: "blur" },
+          {
+            min: 4,
+            max: 4,
+            message: "长度在4个字符",
+            trigger: "change"
+          }
+        ]
+      }
     };
   }
 };
@@ -81,12 +162,11 @@ export default {
 
       .frombox1 {
         margin-bottom: 0px;
-        img{
+        img {
           height: 100%;
           width: 100%;
           background-color: #fff;
         }
-        
       }
 
       .checked-box {
