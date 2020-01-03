@@ -18,15 +18,20 @@
           <el-input prefix-icon="el-icon-user" v-model="ruleForm.phone" placeholder="请输入手机号"></el-input>
         </el-form-item>
         <el-form-item prop="password">
-          <el-input v-model="ruleForm.password" prefix-icon="el-icon-lock" placeholder="请输入密码"></el-input>
+          <el-input
+            v-model="ruleForm.password"
+            prefix-icon="el-icon-lock"
+            show-password
+            placeholder="请输入密码"
+          ></el-input>
         </el-form-item>
         <el-form-item prop="code" class="frombox1">
           <el-row>
             <el-col :span="16">
               <el-input prefix-icon="el-icon-key" v-model="ruleForm.code" placeholder="请输入验证码"></el-input>
             </el-col>
-            <el-col :span="8" >
-              <img :src="ruleForm.imgUrl" @click="changeCode"/>
+            <el-col :span="8">
+              <img :src="ruleForm.imgUrl" @click="changeCode" />
             </el-col>
           </el-row>
         </el-form-item>
@@ -40,7 +45,7 @@
         </el-form-item>
 
         <el-form-item>
-          <el-button type="primary" class="login-button">登录</el-button>
+          <el-button type="primary" class="login-button" @click="submitForm('ruleForm')">登录</el-button>
           <el-button type="primary" class="login-button">注册</el-button>
         </el-form-item>
       </el-form>
@@ -51,6 +56,7 @@
 
 
 <script>
+import axios from "axios";
 ///^1[3456789]\d{9}$/
 
 var validatePhone = (rule, value, callback) => {
@@ -79,21 +85,33 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           //验证成功 发送请求
-          alert("submit!");
+          // alert("submit!");
+          axios({
+            url: process.env.VUE_APP_BASEURL + "/login",
+            method: "post",
+            // 跨域 是否携带 cookie
+            withCredentials: true,
+            data: {
+              phone: this.ruleForm.phone,
+              password: this.ruleForm.password,
+              code: this.ruleForm.code
+            }
+          }).then(res => {
+            window.console.log(res);
+            this.$message.success("登陆成功");
+          });
         } else {
-        this.$message.error("格式不对哦，检查一下呗！");
+          this.$message.error("格式不对哦，检查一下呗！");
           return false;
         }
       });
-    },
-    resetForm(formName) {
-      this.$refs[formName].resetFields();
     },
     changeCode() {
       // 必须要有分隔符
       // this.codeUrl=process.env.VUE_APP_BASEURL+'/captcha?type=login&'+Date.now()
       // this.codeUrl=process.env.VUE_APP_BASEURL+'/captcha?type=login&'+Math.random()
-      this.ruleForm.imgUrl = process.env.VUE_APP_BASEURL + "/captcha?type=login&t=" + Date.now();
+      this.ruleForm.imgUrl =
+        process.env.VUE_APP_BASEURL + "/captcha?type=login&t=" + Date.now();
     }
   },
   data() {
@@ -113,7 +131,7 @@ export default {
             min: 3,
             max: 10,
             message: "长度在 3 到 10 个字符",
-            trigger: "change"
+            trigger: "blur"
           }
         ],
         code: [
