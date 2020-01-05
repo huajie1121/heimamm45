@@ -56,7 +56,7 @@
 
 
 <script>
-import axios from "axios";
+import {login} from "../../api/login";
 ///^1[3456789]\d{9}$/
 
 var validatePhone = (rule, value, callback) => {
@@ -86,16 +86,10 @@ export default {
         if (valid) {
           //验证成功 发送请求
           // alert("submit!");
-          axios({
-            url: process.env.VUE_APP_BASEURL + "/login",
-            method: "post",
-            // 跨域 是否携带 cookie
-            withCredentials: true,
-            data: {
-              phone: this.ruleForm.phone,
-              password: this.ruleForm.password,
-              code: this.ruleForm.code
-            }
+          login({
+            phone: this.ruleForm.phone,
+            password: this.ruleForm.password,
+            code: this.ruleForm.code
           }).then(res => {
             window.console.log(res);
             this.$message.success("登陆成功");

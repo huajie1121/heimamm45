@@ -13,14 +13,18 @@ Vue.use(VueRouter)
 
 //实例化
 const router = new VueRouter({
-    routes:[
+    routes: [
         {
-            path:"/index",
-            component:index
+            path: "/index",
+            component: index
         },
         {
-            path:"/login",
-            component:login
+            path: "/login",
+            component: login
+        },
+        {
+            path: "/",
+            component: login
         },
     ]
 })
