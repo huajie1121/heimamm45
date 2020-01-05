@@ -7,8 +7,8 @@
         <span>黑马面面</span>
       </div>
       <div class="right">
-        <img src="../../assets/login_banner_ele.png" alt="">
-        <span class="span1">欢迎你</span>
+        <img :src="indexUrl" alt />
+        <span class="span1">{{username}},欢迎你</span>
         <el-button size="small">退出</el-button>
       </div>
     </el-header>
@@ -20,8 +20,22 @@
 </template>
 
 <script>
+import { info } from "../../api/index";
 export default {
-  name: "index"
+  name: "index",
+  data() {
+    return {
+      indexUrl: "",
+      username: ""
+    };
+  },
+  created() {
+    info().then(res => {
+      window.console.log(res);
+      this.username = res.data.data.username;
+      this.indexUrl = process.env.VUE_APP_BASEURL+"/"+res.data.data.avatar;
+    });
+  }
 };
 </script>
 
@@ -29,7 +43,7 @@ export default {
 .index-container {
   height: 100%;
   .index-container {
-    background: yellow;
+    background: white;
     display: flex;
     justify-content: space-between;
     .left {
@@ -52,17 +66,15 @@ export default {
     .right {
       display: flex;
       align-items: center;
-      img{
+      img {
         height: 43px;
         width: 43px;
         margin-right: 9px;
       }
-      .span1{
+      .span1 {
         font-size: 14px;
         margin-right: 38px;
       }
-     
-
     }
   }
 

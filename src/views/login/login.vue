@@ -179,7 +179,7 @@ export default {
         return new Error("请输入正确的手机号码");
       }
       if (this.reqForm.code.length === 0) {
-        return new Error("请输入正确的图形码号码");
+        return new Error("请输入正确的图形码");
       }
       sendsms({
         phone: this.reqForm.phone,
@@ -207,9 +207,12 @@ export default {
             password: this.ruleForm.password,
             code: this.ruleForm.code
           }).then(res => {
-            window.console.log(res);
-            this.$message.success("登陆成功");
-            this.$router.push("/index");
+            // window.console.log(res);
+            if (res.data.code == 200) {
+              window.localStorage.setItem("hmtoken", res.data.data.token);
+              this.$message.success("登陆成功");
+              this.$router.push("/index");
+            }
           });
         } else {
           this.$message.error("格式不对哦，检查一下呗！");
