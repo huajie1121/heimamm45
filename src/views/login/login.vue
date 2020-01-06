@@ -121,6 +121,7 @@
 
 <script>
 import { login, sendsms, register } from "../../api/login";
+import { setToken } from "../../utils/token";
 ///^1[3456789]\d{9}$/
 
 var validatePhone = (rule, value, callback) => {
@@ -153,6 +154,9 @@ var validateEmail = (rule, value, callback) => {
 export default {
   name: "login",
   methods: {
+    resetForm(formName) {
+      this.$refs[formName].resetFields();
+    },
     goregister() {
       register({
         username: this.reqForm.username,
@@ -166,6 +170,8 @@ export default {
         if (res.data.code == 200) {
           this.centerDialogVisible = false;
           this.$message.success("注册成功");
+          this.$refs.ruleForm.resetFields();
+          this.reqForm.imageUrl = "";
         } else {
           this.$message.warning("注册失败");
         }
@@ -207,9 +213,10 @@ export default {
             password: this.ruleForm.password,
             code: this.ruleForm.code
           }).then(res => {
-            // window.console.log(res);
+            window.console.log(res);
             if (res.data.code == 200) {
-              window.localStorage.setItem("hmtoken", res.data.data.token);
+              // window.localStorage.setItem("hmtoken", res.data.data.token);
+              setToken(res.data.data.token);
               this.$message.success("登陆成功");
               this.$router.push("/index");
             }
@@ -235,7 +242,7 @@ export default {
     /* 上传 */
     handleAvatarSuccess(res, file) {
       this.reqForm.imageUrl = URL.createObjectURL(file.raw);
-      window.console.log(res);
+      // window.console.log(res);
       this.reqForm.avatar = res.data.file_path;
     },
     beforeAvatarUpload(file) {
