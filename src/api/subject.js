@@ -1,8 +1,8 @@
 import axios from "axios";
 import { getToken } from "../utils/token"
 
-var subjectRequest = axios.create({
-    baseURL: process.env.VUE_APP_BASEURL,
+const subjectRequest = axios.create({
+    baseURL: process.env.VUE_APP_BASEURL
     // headers: { token: getToken() }
 });
 
