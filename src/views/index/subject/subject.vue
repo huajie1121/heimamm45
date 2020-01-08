@@ -43,14 +43,18 @@
         <el-table-column prop="create_time" label="创建时间" width="220"></el-table-column>
         <el-table-column prop="status" label="状态" width="180">
           <template slot-scope="scope">
-            <span v-if="scope.row.status == 0" class="red">禁用</span>
+            <span v-if="scope.row.status == 0" class="jy">禁用</span>
             <span v-else>启用</span>
           </template>
         </el-table-column>
         <el-table-column prop="date" label="操作" width="200">
-          <template>
+          <template slot-scope="scope">
             <el-button type="text" size="small">编辑</el-button>
-            <el-button type="text" size="small">禁用</el-button>
+            <el-button
+              type="text"
+              size="small"
+              @click="subjectStatus(scope.row)"
+            >{{ scope.row.status == 0 ?"启用":"禁用"}}</el-button>
             <el-button type="text" size="small">查看</el-button>
           </template>
         </el-table-column>
@@ -72,7 +76,7 @@
 </template>
 
 <script>
-import { subjectList } from "@/api/subject.js";
+import { subjectList, subjectStatus } from "@/api/subject.js";
 import addDialog from "./components/addDialog.vue";
 export default {
   name: "subject",
@@ -83,19 +87,31 @@ export default {
     this.subjectList();
   },
   methods: {
+    //修改状态
+    subjectStatus(item) {
+      subjectStatus({ id: item.id }).then(res => {
+        window.console.log(res);
+        if (res.data.code == 200) {
+          this.$message.success("修改成功");
+          this.subjectList();
+        }
+      });
+    },
+    /* 获取数据列表 */
     subjectList() {
       subjectList({ limit: this.size, page: this.page }).then(res => {
-        // window.console.log(res);
+        window.console.log(res);
         this.tableData = res.data.data.items;
+
         this.total = res.data.data.pagination.total;
       });
     },
 
-    handleSizeChange(val) {
+    handleSizeChange(size) {
       this.page = 1;
-      this.limit = val;
+      this.size = size;
       this.subjectList();
-      window.console.log(`每页 ${val} 条`);
+      window.console.log(`每页 ${size} 条`);
     },
     handleCurrentChange(val) {
       this.page = val;
@@ -141,5 +157,8 @@ export default {
 }
 .el-pagination {
   text-align: center;
+}
+.jy {
+  color: red;
 }
 </style>
