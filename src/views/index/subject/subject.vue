@@ -49,7 +49,7 @@
         </el-table-column>
         <el-table-column prop="date" label="操作" width="200">
           <template slot-scope="scope">
-            <el-button type="text" size="small">编辑</el-button>
+            <el-button type="text" size="small" @click="enterEdit(scope.row)">编辑</el-button>
             <el-button
               type="text"
               size="small"
@@ -72,21 +72,31 @@
     </el-card>
     <!-- 使用 新增框组件 -->
     <addDialog ref="addDialog"></addDialog>
+    <!-- 使用 修改框组件 -->
+    <editDialog ref="editDialog"></editDialog>
   </div>
 </template>
 
 <script>
 import { subjectList, subjectStatus, subjectRemove } from "@/api/subject.js";
 import addDialog from "./components/addDialog.vue";
+import editDialog from "./components/editDialog.vue";
+
 export default {
   name: "subject",
   components: {
-    addDialog
+    addDialog,
+    editDialog
   },
   created() {
     this.subjectList();
   },
   methods: {
+    //编辑方法
+    enterEdit(item) {
+      this.$refs.editDialog.dialogFormVisible = true;
+      this.$refs.editDialog.editForm = JSON.parse(JSON.stringify(item));
+    },
     //清除学科
     resetFilter() {
       this.$refs.formInline.resetFields();
