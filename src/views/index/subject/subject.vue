@@ -55,7 +55,7 @@
               size="small"
               @click="subjectStatus(scope.row)"
             >{{ scope.row.status == 0 ?"启用":"禁用"}}</el-button>
-            <el-button type="text" size="small">查看</el-button>
+            <el-button type="text" size="small" @click="subjectRemove(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -76,7 +76,7 @@
 </template>
 
 <script>
-import { subjectList, subjectStatus } from "@/api/subject.js";
+import { subjectList, subjectStatus, subjectRemove } from "@/api/subject.js";
 import addDialog from "./components/addDialog.vue";
 export default {
   name: "subject",
@@ -87,6 +87,16 @@ export default {
     this.subjectList();
   },
   methods: {
+    //删除学科
+    subjectRemove(item) {
+      subjectRemove({ id: item.id }).then(res => {
+        // window.console.log(res);
+        if (res.data.code == 200) {
+          this.$message.success("删除成功");
+          this.subjectList();
+        }
+      });
+    },
     //修改状态
     subjectStatus(item) {
       subjectStatus({ id: item.id }).then(res => {
