@@ -1,27 +1,27 @@
 <template>
   <div>
     <el-card class="box-card">
-      <el-form :inline="true" :model="formInline" class="demo-form-inline">
-        <el-form-item label="学科编号">
-          <el-input v-model="formInline.user" class="mini"></el-input>
+      <el-form :inline="true" :model="formInline" ref="formInline" class="demo-form-inline">
+        <el-form-item label="学科编号" prop="rid">
+          <el-input v-model="formInline.rid" class="mini"></el-input>
         </el-form-item>
-        <el-form-item label="学科名称">
-          <el-input v-model="formInline.user" class="big"></el-input>
+        <el-form-item label="学科名称" prop="name">
+          <el-input v-model="formInline.name" class="big"></el-input>
         </el-form-item>
-        <el-form-item label="创建者">
-          <el-input v-model="formInline.user" class="mini"></el-input>
+        <el-form-item label="创建者" prop="username">
+          <el-input v-model="formInline.username" class="mini"></el-input>
         </el-form-item>
-        <el-form-item label="状态">
-          <el-select v-model="formInline.region" placeholder="状态" class="big">
-            <el-option label="区域一" value="shanghai"></el-option>
-            <el-option label="区域二" value="beijing"></el-option>
+        <el-form-item label="状态" prop="status">
+          <el-select v-model="formInline.status" placeholder="状态" class="big">
+            <el-option label="禁用" value="0"></el-option>
+            <el-option label="启用" value="1"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary">搜索</el-button>
+          <el-button type="primary" @click="filterData">搜索</el-button>
         </el-form-item>
         <el-form-item>
-          <el-button>清除</el-button>
+          <el-button @click="resetFilter">清除</el-button>
         </el-form-item>
         <el-form-item>
           <el-button
@@ -87,6 +87,17 @@ export default {
     this.subjectList();
   },
   methods: {
+    //清除学科
+    resetFilter() {
+      this.$refs.formInline.resetFields();
+      // 调用接口
+      this.subjectList();
+    },
+    //搜索学科
+    filterData() {
+      this.page = 1;
+      this.subjectList();
+    },
     //删除学科
     subjectRemove(item) {
       subjectRemove({ id: item.id }).then(res => {
@@ -109,7 +120,11 @@ export default {
     },
     /* 获取数据列表 */
     subjectList() {
-      subjectList({ limit: this.size, page: this.page }).then(res => {
+      subjectList({
+        limit: this.size,
+        page: this.page,
+        ...this.formInline
+      }).then(res => {
         window.console.log(res);
         this.tableData = res.data.data.items;
 
@@ -135,7 +150,13 @@ export default {
       tableData: [],
       size: 10,
       currentPage4: 1,
-      formInline: {},
+      //筛选列表内容
+      formInline: {
+        rid: "",
+        user: "",
+        username: "",
+        status: ""
+      },
       total: 0,
       subjectData: {}
     };
