@@ -37,9 +37,9 @@
         <el-table-column prop="name" label="备注" width="200"></el-table-column>
         <el-table-column prop="name" label="状态" width="200"></el-table-column>
         <el-table-column prop="name" label="操作">
-          <el-button  type="text">编辑</el-button>
-          <el-button  type="text">修改</el-button>
-          <el-button  type="text">删除</el-button>
+          <el-button type="text">编辑</el-button>
+          <el-button type="text">修改</el-button>
+          <el-button type="text">删除</el-button>
         </el-table-column>
       </el-table>
       <el-pagination
@@ -74,9 +74,7 @@ export default {
       /* 顶部表单 */
       formInline: {},
       /* 表格表单 */
-      tableData: [
-        {date:1}
-      ]
+      tableData: []
     };
   }
 };
