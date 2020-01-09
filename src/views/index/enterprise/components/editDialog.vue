@@ -2,8 +2,8 @@
   <!-- 编辑学科 -->
   <el-dialog title="编辑学科" :visible.sync="dialogFormVisible" width="30%" center>
     <el-form :model="editForm" :rules="rules" label-width="80px" ref="editForm">
-      <el-form-item label="学科编号" prop="rid">
-        <el-input v-model="editForm.rid" autocomplete="off"></el-input>
+      <el-form-item label="学科编号" prop="eid">
+        <el-input v-model="editForm.eid" autocomplete="off"></el-input>
       </el-form-item>
 
       <el-form-item label="学科名称" prop="name">
@@ -24,13 +24,13 @@
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="dialogFormVisible = false">取 消</el-button>
-      <el-button type="primary" @click="subjectedit">确 定</el-button>
+      <el-button type="primary" @click="senterpriseEdit">确 定</el-button>
     </div>
   </el-dialog>
 </template>
 
 <script>
-import { subjectEdit } from "@/api/subject";
+import { senterpriseEdit } from "@/api/subject";
 export default {
   data() {
     return {
@@ -51,12 +51,12 @@ export default {
     };
   },
   methods: {
-    subjectedit() {
+    senterpriseEdit() {
       this.$refs.editForm.validate(valid => {
         if (valid) {
           //验证成功 发送请求
           // alert("submit!");
-          subjectEdit(this.editForm).then(res => {
+          senterpriseEdit(this.editForm).then(res => {
             // window.console.log(res);
             if (res.data.code == 200) {
               this.$message.success("编辑成功");

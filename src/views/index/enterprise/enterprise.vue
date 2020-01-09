@@ -48,7 +48,7 @@
         </el-table-column>
         <el-table-column fixed="right" label="操作" width="250">
           <template slot-scope="scope">
-            <el-button type="text" size="small">编辑</el-button>
+            <el-button type="text" size="small" @click="editDialog(scope.row)">编辑</el-button>
             <el-button
               type="text"
               size="small"
@@ -73,7 +73,7 @@
     <!-- 新增框 -->
     <addDialog ref="addDialog"></addDialog>
     <!-- 编辑框 -->
-    <editDialog></editDialog>
+    <editDialog ref="editDialog"></editDialog>
   </div>
 </template>
 
@@ -139,6 +139,12 @@ export default {
     /* 新增 */
     addDialog() {
       this.$refs.addDialog.dialogFormVisible = true;
+    },
+    /* 编辑 */
+    editDialog(item) {
+      this.$refs.editDialog.dialogFormVisible = true;
+      // 设置数据
+      this.$refs.editDialog.editForm = JSON.parse(JSON.stringify(item));
     },
     /* 页容量 */
     handleSizeChange(val) {
