@@ -50,7 +50,7 @@
           <template slot-scope="scope">
             <el-button type="text" size="small">编辑</el-button>
             <el-button type="text" size="small">{{scope.row.status==0?"启用":"禁用"}}</el-button>
-            <el-button type="text" size="small">删除</el-button>
+            <el-button type="text" size="small" @click="delenterprise(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -76,7 +76,7 @@
 <script>
 import editDialog from "./components/editDialog";
 import addDialog from "./components/addDialog";
-import { enterpriseList } from "@/api/enterprise";
+import { enterpriseList, enterpriseRemove } from "@/api/enterprise";
 export default {
   name: "enterprise",
   components: {
@@ -87,13 +87,22 @@ export default {
     this.enterpriseList();
   },
   methods: {
+    /* 删除 */
+    delenterprise(item) {
+      enterpriseRemove({ id: item.id }).then(res => {
+        window.console.log(res);
+        if (res.data.code == 200) {
+          this.$message.success("恭喜你，删除成功");
+          this.enterpriseList();
+        }
+      });
+    },
     /* 搜索 */
     inquireList() {
       this.enterpriseList();
     },
     /* 清空搜索内容 */
     clearQuery() {
-      window.console.log("1");
       this.$refs.formInline.resetFields();
       this.enterpriseList();
     },
