@@ -33,16 +33,23 @@
     </el-card>
     <el-card class="box-card1">
       <el-table :data="tableData" style="width: 100%">
-        <el-table-column prop="date" label="序号" width="180"></el-table-column>
-        <el-table-column prop="name" label="企业编码" width="220"></el-table-column>
+        <el-table-column prop="date" type="index" label="序号" width="180"></el-table-column>
+        <el-table-column prop="eid" label="企业编码" width="220"></el-table-column>
         <el-table-column prop="name" label="企业名称" width="220"></el-table-column>
-        <el-table-column prop="name" label="创建者" width="200"></el-table-column>
-        <el-table-column prop="name" label="创建日期" width="220"></el-table-column>
-        <el-table-column prop="address" label="状态"></el-table-column>
+        <el-table-column prop="username" label="创建者" width="200"></el-table-column>
+        <el-table-column prop="create_time" label="创建日期" width="220">
+          <template slot-scope="scope">{{scope.row.create_time|formatTime}}</template>
+        </el-table-column>
+        <el-table-column prop="status" label="状态">
+          <template slot-scope="scope">
+            <span v-if="scope.row.status==0" class="red">禁用</span>
+            <span v-else>启用</span>
+          </template>
+        </el-table-column>
         <el-table-column fixed="right" label="操作" width="250">
-          <template>
+          <template slot-scope="scope">
             <el-button type="text" size="small">编辑</el-button>
-            <el-button type="text" size="small">禁用</el-button>
+            <el-button type="text" size="small">{{scope.row.status==0?"启用":"禁用"}}</el-button>
             <el-button type="text" size="small">删除</el-button>
           </template>
         </el-table-column>
@@ -52,7 +59,7 @@
         background
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="currentPage4"
+        :current-page="page"
         :page-sizes="sizes"
         :page-size="size"
         layout="total, sizes, prev, pager, next, jumper"
@@ -69,13 +76,24 @@
 <script>
 import editDialog from "./components/editDialog";
 import addDialog from "./components/addDialog";
+import { enterpriseList } from "@/api/enterprise";
 export default {
   name: "enterprise",
   components: {
     editDialog,
     addDialog
   },
+  created() {
+    this.enterpriseList();
+  },
   methods: {
+    enterpriseList() {
+      enterpriseList({ page: this.page, limit: this.size }).then(res => {
+        window.console.log(res);
+        this.tableData = res.data.data.items;
+        this.total = res.data.data.pagination.total;
+      });
+    },
     addDialog() {
       this.$refs.addDialog.dialogFormVisible = true;
     },
@@ -91,29 +109,8 @@ export default {
       total: 0,
       size: 2,
       sizes: [2, 4, 6, 10],
-      currentPage4: 1,
-      tableData: [
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1517 弄"
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1519 弄"
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄"
-        }
-      ],
+      page: 1,
+      tableData: [],
       formInline: {}
     };
   }
@@ -126,5 +123,8 @@ export default {
 }
 .pagination {
   margin-top: 30px;
+}
+.red {
+  color: red;
 }
 </style>

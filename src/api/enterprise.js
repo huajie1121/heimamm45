@@ -1,9 +1,9 @@
 import subjectRequest from "../utils/request"
 
 
-export function subjectList(params) {
+export function enterpriseList(params) {
     return subjectRequest({
-        url: '/subject/list',
+        url: '/enterprise/list',
         method: 'get',
         params
     })
@@ -11,33 +11,33 @@ export function subjectList(params) {
 
 
 
-export function subjectAdd(data) {
+export function enterpriseAdd(data) {
     return subjectRequest({
-        url: '/subject/add',
+        url: '/enterprise/add',
         method: 'post',
         data,
     })
 }
 
-export function subjectStatus(data) {
+export function enterpriseStatus(data) {
     return subjectRequest({
-        url: '/subject/status',
+        url: '/enterprise/status',
         method: 'post',
         data,
     })
 }
 
-export function subjectEdit(data) {
+export function senterpriseEdit(data) {
     return subjectRequest({
-        url: '/subject/edit',
+        url: '/enterprise/edit',
         method: 'post',
         data,
     })
 }
 
-export function subjectRemove(data) {
+export function enterpriseRemove(data) {
     return subjectRequest({
-        url: '/subject/remove',
+        url: '/enterprise/remove',
         method: 'post',
         data,
     })

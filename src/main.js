@@ -8,6 +8,9 @@ Vue.use(ElementUI);
 
 import "./style/bass.css"
 
+//全局过滤器
+import "./filters/index"
+
 Vue.config.productionTip = false
 window.console.log(process.env.VUE_APP_BASEURL)
 
