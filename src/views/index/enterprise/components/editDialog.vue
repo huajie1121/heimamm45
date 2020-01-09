@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import { senterpriseEdit } from "@/api/subject";
+import { senterpriseEdit } from "@/api/enterprise";
 export default {
   data() {
     return {
@@ -60,7 +60,7 @@ export default {
             // window.console.log(res);
             if (res.data.code == 200) {
               this.$message.success("编辑成功");
-              this.$parent.subjectList();
+              this.$parent.enterpriseList();
               this.dialogFormVisible = false;
               // 清空内容
             }
