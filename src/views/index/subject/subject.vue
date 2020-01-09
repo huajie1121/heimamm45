@@ -60,6 +60,7 @@
         </el-table-column>
       </el-table>
       <el-pagination
+        class="pagination"
         background
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -201,5 +202,8 @@ export default {
 }
 .jy {
   color: red;
+}
+.pagination{
+  margin-top: 30px;
 }
 </style>

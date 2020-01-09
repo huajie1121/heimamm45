@@ -1,9 +1,9 @@
-import axios from "axios";
+import subjectRequest from "../utils/request"
 
 //登陆
 export function login(data) {
-    return axios({
-        url: process.env.VUE_APP_BASEURL + "/login",
+    return subjectRequest({
+        url: "/login",
         method: "post",
         // 跨域 是否携带 cookie
         withCredentials: true,
@@ -13,8 +13,8 @@ export function login(data) {
 
 
 export function sendsms(data) {
-    return axios({
-        url: process.env.VUE_APP_BASEURL + "/sendsms",
+    return subjectRequest({
+        url: "/sendsms",
         method: "post",
         // 跨域 是否携带 cookie
         withCredentials: true,
@@ -25,8 +25,8 @@ export function sendsms(data) {
 
 
 export function register(data) {
-    return axios({
-        url: process.env.VUE_APP_BASEURL + "/register",
+    return subjectRequest({
+        url: "/register",
         method: "post",
         // 跨域 是否携带 cookie
         withCredentials: true,

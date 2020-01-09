@@ -27,7 +27,7 @@
         </el-form-item>
 
         <el-form-item>
-          <el-button type="primary" icon="el-icon-plus">新增企业</el-button>
+          <el-button type="primary" icon="el-icon-plus" @click="addDialog">新增企业</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -48,23 +48,37 @@
         </el-table-column>
       </el-table>
       <el-pagination
+        class="pagination"
         background
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="currentPage4"
-        :page-sizes="[100, 200, 300, 400]"
-        :page-size="100"
+        :page-sizes="sizes"
+        :page-size="size"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="400"
+        :total="total"
       ></el-pagination>
     </el-card>
+    <!-- 新增框 -->
+    <addDialog ref="addDialog"></addDialog>
+    <!-- 编辑框 -->
+    <editDialog></editDialog>
   </div>
 </template>
 
 <script>
+import editDialog from "./components/editDialog";
+import addDialog from "./components/addDialog";
 export default {
   name: "enterprise",
+  components: {
+    editDialog,
+    addDialog
+  },
   methods: {
+    addDialog() {
+      this.$refs.addDialog.dialogFormVisible = true;
+    },
     handleSizeChange(val) {
       window.console.log(`每页 ${val} 条`);
     },
@@ -74,6 +88,9 @@ export default {
   },
   data() {
     return {
+      total: 0,
+      size: 2,
+      sizes: [2, 4, 6, 10],
       currentPage4: 1,
       tableData: [
         {
@@ -106,5 +123,8 @@ export default {
 <style>
 .box-card {
   margin-bottom: 20px;
+}
+.pagination {
+  margin-top: 30px;
 }
 </style>
