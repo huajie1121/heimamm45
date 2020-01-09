@@ -49,7 +49,11 @@
         <el-table-column fixed="right" label="操作" width="250">
           <template slot-scope="scope">
             <el-button type="text" size="small">编辑</el-button>
-            <el-button type="text" size="small">{{scope.row.status==0?"启用":"禁用"}}</el-button>
+            <el-button
+              type="text"
+              size="small"
+              @click="enterpriseStatus((scope.row))"
+            >{{scope.row.status==0?"启用":"禁用"}}</el-button>
             <el-button type="text" size="small" @click="delenterprise(scope.row)">删除</el-button>
           </template>
         </el-table-column>
@@ -76,7 +80,11 @@
 <script>
 import editDialog from "./components/editDialog";
 import addDialog from "./components/addDialog";
-import { enterpriseList, enterpriseRemove } from "@/api/enterprise";
+import {
+  enterpriseList,
+  enterpriseRemove,
+  enterpriseStatus
+} from "@/api/enterprise";
 export default {
   name: "enterprise",
   components: {
@@ -87,6 +95,16 @@ export default {
     this.enterpriseList();
   },
   methods: {
+    /* 修改状态 */
+    enterpriseStatus(item) {
+      enterpriseStatus({ id: item.id }).then(res => {
+        window.console.log(res);
+        if (res.data.code == 200) {
+          this.$message.success("恭喜你，修改成功");
+          this.enterpriseList();
+        }
+      });
+    },
     /* 删除 */
     delenterprise(item) {
       enterpriseRemove({ id: item.id }).then(res => {
